@@ -5,16 +5,19 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Leaf, Mail, Lock, Chrome, Facebook } from 'lucide-react';
+import { Leaf, Mail, Lock, User, Chrome, Facebook } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Signup = () => {
   const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
-  const { signIn, signInWithProvider } = useAuth();
+  const { signUp, signInWithProvider } = useAuth();
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,15 +29,26 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (formData.password !== formData.confirmPassword) {
+      return;
+    }
+
     setIsLoading(true);
-    const { error } = await signIn(formData.email, formData.password);
+    const { error } = await signUp(
+      formData.email,
+      formData.password,
+      formData.firstName,
+      formData.lastName
+    );
+    
     if (!error) {
       navigate('/');
     }
     setIsLoading(false);
   };
 
-  const handleSocialLogin = async (provider: 'google' | 'facebook') => {
+  const handleSocialSignup = async (provider: 'google' | 'facebook') => {
     setIsLoading(true);
     const { error } = await signInWithProvider(provider);
     if (!error) {
@@ -53,18 +67,18 @@ const Login = () => {
                 <Leaf className="w-8 h-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-2xl gradient-text">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl gradient-text">Join Green Horizon</CardTitle>
             <CardDescription>
-              Sign in to your Green Horizon account and continue your sustainable journey
+              Start your sustainable journey today and make a positive impact on the planet
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Social Login Buttons */}
+            {/* Social Signup Buttons */}
             <div className="space-y-3">
               <Button 
                 variant="outline" 
                 className="w-full"
-                onClick={() => handleSocialLogin('google')}
+                onClick={() => handleSocialSignup('google')}
                 disabled={isLoading}
               >
                 <Chrome className="w-4 h-4 mr-2" />
@@ -73,7 +87,7 @@ const Login = () => {
               <Button 
                 variant="outline" 
                 className="w-full"
-                onClick={() => handleSocialLogin('facebook')}
+                onClick={() => handleSocialSignup('facebook')}
                 disabled={isLoading}
               >
                 <Facebook className="w-4 h-4 mr-2" />
@@ -90,8 +104,43 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Email/Password Form */}
+            {/* Signup Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="firstName">First Name</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      placeholder="John"
+                      className="pl-10"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lastName">Last Name</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      placeholder="Doe"
+                      className="pl-10"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <div className="relative">
@@ -100,7 +149,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="your@email.com"
+                    placeholder="john@example.com"
                     className="pl-10"
                     value={formData.email}
                     onChange={handleInputChange}
@@ -117,7 +166,7 @@ const Login = () => {
                     id="password"
                     name="password"
                     type="password"
-                    placeholder="Enter your password"
+                    placeholder="Create a strong password"
                     className="pl-10"
                     value={formData.password}
                     onChange={handleInputChange}
@@ -126,34 +175,32 @@ const Login = () => {
                 </div>
               </div>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    className="rounded border-border"
+              <div className="space-y-2">
+                <Label htmlFor="confirmPassword">Confirm Password</Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    type="password"
+                    placeholder="Confirm your password"
+                    className="pl-10"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    required
                   />
-                  <Label htmlFor="remember" className="text-sm">
-                    Remember me
-                  </Label>
                 </div>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
               </div>
 
               <Button className="w-full btn-eco" type="submit" disabled={isLoading}>
-                {isLoading ? 'Signing In...' : 'Sign In'}
+                {isLoading ? 'Creating Account...' : 'Create Account'}
               </Button>
             </form>
 
             <div className="text-center text-sm">
-              <span className="text-muted-foreground">Don't have an account? </span>
-              <Link to="/signup" className="text-primary hover:underline">
-                Sign up
+              <span className="text-muted-foreground">Already have an account? </span>
+              <Link to="/login" className="text-primary hover:underline">
+                Sign in
               </Link>
             </div>
           </CardContent>
@@ -163,4 +210,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
