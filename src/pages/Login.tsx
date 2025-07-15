@@ -44,26 +44,34 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 hero-background">
+    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Animated background */}
+      <div className="absolute inset-0 hero-background">
+        <div className="absolute top-10 left-10 w-32 h-32 bg-primary/10 rounded-full float-animation opacity-60"></div>
+        <div className="absolute bottom-20 right-16 w-24 h-24 bg-mint-green/10 rounded-full float-animation opacity-40" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/3 right-1/4 w-16 h-16 bg-leaf-green/10 rounded-full float-animation opacity-80" style={{ animationDelay: '4s' }}></div>
+        <div className="absolute bottom-1/3 left-1/4 w-20 h-20 bg-forest-green/10 rounded-full float-animation opacity-50" style={{ animationDelay: '1s' }}></div>
+      </div>
+      
       <div className="w-full max-w-md">
-        <Card className="glass-card">
+        <Card className="glass-card slide-in-up shadow-2xl border-0">
           <CardHeader className="text-center">
-            <div className="flex justify-center mb-4">
-              <div className="w-16 h-16 bg-gradient-eco rounded-full flex items-center justify-center">
+            <div className="flex justify-center mb-6">
+              <div className="w-20 h-20 bg-gradient-eco rounded-full flex items-center justify-center pulse-glow">
                 <Leaf className="w-8 h-8 text-white" />
               </div>
             </div>
-            <CardTitle className="text-2xl gradient-text">Welcome Back</CardTitle>
+            <CardTitle className="text-3xl gradient-text mb-2">Welcome Back</CardTitle>
             <CardDescription>
-              Sign in to your Green Horizon account and continue your sustainable journey
+              Sign in to your Green Horizon account and continue your sustainable journey 🌱
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 p-8">
             {/* Social Login Buttons */}
             <div className="space-y-3">
               <Button 
-                variant="outline" 
-                className="w-full"
+                variant="outline"
+                className="w-full h-12 hover:scale-105 transition-all duration-300 hover:shadow-md"
                 onClick={() => handleSocialLogin('google')}
                 disabled={isLoading}
               >
@@ -71,8 +79,8 @@ const Login = () => {
                 Continue with Google
               </Button>
               <Button 
-                variant="outline" 
-                className="w-full"
+                variant="outline"
+                className="w-full h-12 hover:scale-105 transition-all duration-300 hover:shadow-md"
                 onClick={() => handleSocialLogin('facebook')}
                 disabled={isLoading}
               >
@@ -83,10 +91,10 @@ const Login = () => {
 
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <Separator />
+                <Separator className="bg-border/50" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-card px-4 text-muted-foreground font-medium">Or continue with email</span>
               </div>
             </div>
 
@@ -101,7 +109,7 @@ const Login = () => {
                     name="email"
                     type="email"
                     placeholder="your@email.com"
-                    className="pl-10"
+                    className="pl-10 h-12 form-input"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
@@ -118,7 +126,7 @@ const Login = () => {
                     name="password"
                     type="password"
                     placeholder="Enter your password"
-                    className="pl-10"
+                    className="pl-10 h-12 form-input"
                     value={formData.password}
                     onChange={handleInputChange}
                     required
@@ -131,7 +139,7 @@ const Login = () => {
                   <input
                     type="checkbox"
                     id="remember"
-                    className="rounded border-border"
+                    className="rounded border-border w-4 h-4 text-primary focus:ring-primary"
                   />
                   <Label htmlFor="remember" className="text-sm">
                     Remember me
@@ -139,20 +147,27 @@ const Login = () => {
                 </div>
                 <Link
                   to="/forgot-password"
-                  className="text-sm text-primary hover:underline"
+                  className="text-sm text-primary hover:underline hover:scale-105 transition-transform"
                 >
                   Forgot password?
                 </Link>
               </div>
 
-              <Button className="w-full btn-eco" type="submit" disabled={isLoading}>
-                {isLoading ? 'Signing In...' : 'Sign In'}
+              <Button className="w-full btn-eco ripple h-12 text-lg font-semibold" type="submit" disabled={isLoading}>
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Signing In...
+                  </div>
+                ) : (
+                  'Sign In'
+                )}
               </Button>
             </form>
 
-            <div className="text-center text-sm">
+            <div className="text-center text-sm pt-4">
               <span className="text-muted-foreground">Don't have an account? </span>
-              <Link to="/signup" className="text-primary hover:underline">
+              <Link to="/signup" className="text-primary hover:underline font-semibold hover:scale-105 transition-transform inline-block">
                 Sign up
               </Link>
             </div>

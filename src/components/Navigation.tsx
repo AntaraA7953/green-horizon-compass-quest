@@ -24,15 +24,15 @@ const Navigation = () => {
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 glass-card">
+    <nav className="fixed top-0 left-0 right-0 z-50 glass-card border-b border-border/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-eco rounded-full flex items-center justify-center">
+          <Link to="/" className="flex items-center space-x-2 group">
+            <div className="w-8 h-8 bg-gradient-eco rounded-full flex items-center justify-center pulse-glow group-hover:scale-110 transition-transform">
               <Leaf className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl gradient-text">Green Horizon</span>
+            <span className="font-bold text-xl gradient-text group-hover:scale-105 transition-transform">Green Horizon</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -41,10 +41,10 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.path}
-                className={`transition-colors ${
+                className={`nav-link transition-all duration-300 ${
                   isActive(item.path)
-                    ? 'text-primary font-medium'
-                    : 'text-muted-foreground hover:text-primary'
+                    ? 'text-primary font-medium active'
+                    : 'text-muted-foreground hover:text-primary hover:scale-105'
                 }`}
               >
                 {item.name}
@@ -59,10 +59,10 @@ const Navigation = () => {
               <UserAccount />
             ) : (
               <>
-                <Button variant="outline" asChild>
+                <Button variant="outline" asChild className="hover:scale-105 transition-transform">
                   <Link to="/login">Login</Link>
                 </Button>
-                <Button className="btn-eco" asChild>
+                <Button className="btn-eco ripple" asChild>
                   <Link to="/signup">Get Started</Link>
                 </Button>
               </>
@@ -76,6 +76,7 @@ const Navigation = () => {
               variant="ghost"
               size="sm"
               onClick={() => setIsOpen(!isOpen)}
+              className="hover:scale-110 transition-transform"
             >
               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
@@ -84,17 +85,18 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden slide-in-up">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navItems.map((item) => (
+              {navItems.map((item, index) => (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors ${
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-all duration-300 stagger-animation hover:scale-105 ${
                     isActive(item.path)
                       ? 'text-primary bg-primary/10'
                       : 'text-muted-foreground hover:text-primary hover:bg-muted'
                   }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
                   onClick={() => setIsOpen(false)}
                 >
                   {item.name}
@@ -107,10 +109,10 @@ const Navigation = () => {
                   </div>
                 ) : (
                   <>
-                    <Button variant="outline" asChild>
+                    <Button variant="outline" asChild className="hover:scale-105 transition-transform">
                       <Link to="/login">Login</Link>
                     </Button>
-                    <Button className="btn-eco" asChild>
+                    <Button className="btn-eco ripple" asChild>
                       <Link to="/signup">Get Started</Link>
                     </Button>
                   </>

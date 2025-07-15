@@ -158,13 +158,13 @@ const Index = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Link key={feature.name} to={feature.path}>
-                <Card className="feature-card glass-card group h-full">
+                <Card className="feature-card glass-card group h-full stagger-animation">
                   <CardContent className="p-8 text-center">
-                    <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform`}>
+                    <div className={`w-16 h-16 bg-gradient-to-br ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 group-hover:rotate-12 transition-all duration-500`}>
                       <feature.icon className="w-8 h-8 text-white" />
                     </div>
                     
-                    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors">
+                    <h3 className="text-2xl font-bold mb-4 group-hover:text-primary transition-colors duration-300">
                       {feature.name}
                     </h3>
                     
@@ -172,9 +172,9 @@ const Index = () => {
                       {feature.description}
                     </p>
 
-                    <Button variant="ghost" className="group-hover:text-primary">
+                    <Button variant="ghost" className="group-hover:text-primary group-hover:scale-105 transition-all duration-300">
                       Explore
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform duration-300" />
                     </Button>
                   </CardContent>
                 </Card>
