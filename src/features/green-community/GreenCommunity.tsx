@@ -8,7 +8,7 @@ const GreenCommunity = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
-      
+
       <div className="pt-20 pb-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -98,7 +98,11 @@ const GreenCommunity = () => {
           </div>
 
           <div className="text-center">
-            <Button size="lg" className="btn-eco">
+            <Button
+              size="lg"
+              className="btn-eco"
+              onClick={() => window.location.href = 'https://green-community-six.vercel.app/'}
+            >
               Join Community
             </Button>
           </div>
