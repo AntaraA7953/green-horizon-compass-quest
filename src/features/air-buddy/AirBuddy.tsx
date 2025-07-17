@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Wind, Activity, Shield, AlertTriangle, Thermometer, Droplets, RefreshCw } from 'lucide-react';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 const AirBuddy = () => {
   const [isMonitoring, setIsMonitoring] = useState(false);
@@ -23,22 +24,22 @@ const AirBuddy = () => {
   ];
 
   const ecoTips = [
+    "💧 Stay hydrated when the air is dry.",
     "🌱 Add air-purifying indoor plants like spider plant or peace lily.",
     "🚲 Reduce pollution by biking or walking for short trips.",
-    "💧 Stay hydrated when the air is dry.",
     "🧼 Keep windows closed on poor AQI days.",
     "🌍 Recycle and reduce waste to help reduce pollution."
   ];
 
   const getAQIColor = (aqi) => {
     const colors = {
-      1: 'text-green-500',
-      2: 'text-green-400',
-      3: 'text-yellow-500',
-      4: 'text-orange-500',
-      5: 'text-red-500'
+      1: 'text-green-400',
+      2: 'text-green-300',
+      3: 'text-yellow-400',
+      4: 'text-orange-400',
+      5: 'text-red-400'
     };
-    return colors[aqi] || 'text-gray-500';
+    return colors[aqi] || 'text-gray-400';
   };
 
   const showRandomTip = () => {
@@ -218,36 +219,35 @@ const AirBuddy = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900 dark:to-pink-900">
       <Navigation />
       
-      <div className="pt-20 pb-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-eco rounded-full flex items-center justify-center mx-auto mb-4">
-              <Wind className="w-8 h-8 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold gradient-text mb-2">
-              Air Buddy Monitor
-            </h1>
-          </div>
-
-          {/* Main AQI Card */}
-          <Card className="glass-card mb-8">
+      {/* Theme Toggle */}
+      <div className="absolute top-24 right-4 z-10">
+        <ThemeToggle />
+      </div>
+      
+      <div className="pt-20 pb-12 flex items-center justify-center min-h-screen">
+        <div className="w-full max-w-sm mx-auto px-4">
+          {/* Main AirBuddy Card */}
+          <Card className="bg-white/20 dark:bg-gray-800/30 backdrop-blur-xl border border-white/30 dark:border-gray-700/30 shadow-2xl rounded-3xl overflow-hidden">
             <CardContent className="p-8 text-center">
               {loading ? (
-                <div className="text-xl">Loading AQI...</div>
+                <div className="text-xl text-white dark:text-gray-200">Loading AQI...</div>
               ) : aqiData ? (
                 <>
-                  <div className={`text-4xl font-bold mb-2 ${getAQIColor(aqiData.level)}`}>
-                    AQI Level: {aqiData.level} ({aqiData.description})
-                  </div>
-                  <div className="text-lg text-muted-foreground mb-6">
-                    {aqiData.message}
+                  {/* Header */}
+                  <div className="mb-6">
+                    <h1 className="text-3xl font-bold text-white dark:text-white mb-2">
+                      AirBuddy
+                    </h1>
+                    <div className="text-lg font-semibold text-gray-200 dark:text-gray-300">
+                      AQI Level: {aqiData.level} ({aqiData.description})
+                    </div>
                   </div>
                   
                   {/* Air Quality Icon */}
-                  <div className="w-20 h-20 mx-auto mb-6">
+                  <div className="w-16 h-16 mx-auto mb-6">
                     <img 
                       src={`/lovable-uploads/${
                         aqiData.level <= 2 ? 'c01fcfe8-bad9-4603-822f-b08a9e1cb189.png' : 
@@ -259,76 +259,72 @@ const AirBuddy = () => {
                     />
                   </div>
 
+                  {/* Message */}
+                  <div className="text-gray-200 dark:text-gray-300 mb-6 text-lg">
+                    {aqiData.message}
+                  </div>
+
                   {/* Weather Info */}
                   {weatherData && (
-                    <div className="grid grid-cols-3 gap-4 mb-6">
-                      <div className="text-center">
-                        <Thermometer className="w-6 h-6 mx-auto mb-2 text-primary" />
-                        <div className="text-lg font-semibold">{weatherData.temperature}°C</div>
-                        <div className="text-sm text-muted-foreground">Temperature</div>
+                    <div className="space-y-3 mb-6 text-gray-200 dark:text-gray-300">
+                      <div className="flex items-center justify-center gap-2">
+                        <Thermometer className="w-4 h-4 text-pink-400" />
+                        <span>Temperature: {weatherData.temperature}°C</span>
                       </div>
-                      <div className="text-center">
-                        <Droplets className="w-6 h-6 mx-auto mb-2 text-primary" />
-                        <div className="text-lg font-semibold">{weatherData.humidity}%</div>
-                        <div className="text-sm text-muted-foreground">Humidity</div>
+                      <div className="flex items-center justify-center gap-2">
+                        <Droplets className="w-4 h-4 text-blue-400" />
+                        <span>Humidity: {weatherData.humidity}%</span>
                       </div>
-                      <div className="text-center">
-                        <Wind className="w-6 h-6 mx-auto mb-2 text-primary" />
-                        <div className="text-lg font-semibold">{weatherData.windSpeed} m/s</div>
-                        <div className="text-sm text-muted-foreground">Wind Speed</div>
+                      <div className="flex items-center justify-center gap-2">
+                        <Wind className="w-4 h-4 text-gray-400" />
+                        <span>Wind Speed: {weatherData.windSpeed} m/s</span>
                       </div>
                     </div>
                   )}
 
                   {/* Alert for poor air quality */}
                   {aqiData.level >= 4 && (
-                    <div className="bg-destructive/20 border border-destructive/30 rounded-lg p-4 mb-6">
-                      <div className="flex items-center justify-center gap-2 text-destructive">
+                    <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 mb-6">
+                      <div className="flex items-center justify-center gap-2 text-red-200">
                         <img 
                           src="/lovable-uploads/5179f9f8-f9b9-460d-ac8c-8eafead5e247.png"
                           alt="Alert"
-                          className="w-6 h-6"
+                          className="w-5 h-5"
                         />
-                        <span className="font-semibold">Air quality is poor! Stay safe!</span>
+                        <span className="text-sm font-medium">Air quality is poor! Stay safe!</span>
                       </div>
+                    </div>
+                  )}
+
+                  {/* Refresh Button */}
+                  <Button 
+                    onClick={getAQI} 
+                    disabled={loading} 
+                    className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-2 rounded-lg font-medium mb-4 disabled:opacity-50"
+                  >
+                    Refresh AQI
+                  </Button>
+
+                  {/* Countdown */}
+                  {countdown > 0 && (
+                    <div className="text-sm text-gray-300 dark:text-gray-400 mb-4">
+                      Next update in {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}s
                     </div>
                   )}
 
                   {/* Tips */}
                   {currentTip && (
-                    <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 mb-6">
-                      <div className="text-sm text-primary font-medium">
-                        💡 Eco Tip: {currentTip}
-                      </div>
+                    <div className="text-sm text-blue-200 dark:text-blue-300 italic">
+                      <Droplets className="w-4 h-4 inline mr-1" />
+                      {currentTip}
                     </div>
                   )}
-
-                  {/* Countdown */}
-                  {countdown > 0 && (
-                    <div className="text-sm text-muted-foreground mb-4">
-                      Next update in {Math.floor(countdown / 60)}:{(countdown % 60).toString().padStart(2, '0')}
-                    </div>
-                  )}
-
-                  <Button onClick={getAQI} disabled={loading} className="btn-eco">
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Refresh AQI
-                  </Button>
                 </>
               ) : (
-                <div className="text-xl">Unable to load AQI data</div>
+                <div className="text-xl text-white dark:text-gray-200">Unable to load AQI data</div>
               )}
             </CardContent>
           </Card>
-
-          {/* Character Image */}
-          <div className="text-center">
-            <img 
-              src="/lovable-uploads/b900263b-cd23-4b86-b924-242686c18618.png"
-              alt="Eco Character"
-              className="w-24 h-24 mx-auto opacity-80"
-            />
-          </div>
         </div>
       </div>
     </div>
